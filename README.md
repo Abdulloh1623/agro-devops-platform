@@ -70,8 +70,8 @@ Before running the project, install:
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Abdulloh1623-devops-agro-app.git
-cd Abdulloh1623-devops-agro-app
+git clone https://github.com/Abdulloh1623/agro-devops-platform.git
+cd agro-devops-platform
 ````
 
 ### 2️⃣ Start Minikube
@@ -207,10 +207,10 @@ In Grafana:
 
 ## 👨‍💻 Author
 
-**Your Name**
-GitHub: [https://github.com/YOUR_USERNAME](https://github.com/Abdulloh1623)
+**Abdulloh Khayrullaev**  
+GitHub: [@Abdulloh1623](https://github.com/Abdulloh1623) · LinkedIn: [in/abuseven](https://www.linkedin.com/in/abuseven)
 
-## Some screenshotes from Grafana dashboards
+## Some screenshots from Grafana dashboards
 
 
 > <img width="1280" height="824" alt="image" src="https://github.com/user-attachments/assets/f9333aec-ece8-40a3-8c0f-7eb7e532b1a5" />
