@@ -3,7 +3,7 @@ replicaCount: 3
 image:
   repository: abuseven/agro-app
   # Updated automatically by the CI pipeline with the commit SHA.
-  tag: "latest"
+  tag: "f5fc4442180f02db368b73b456dddebf1a990b87"
   pullPolicy: IfNotPresent
 
 service:
