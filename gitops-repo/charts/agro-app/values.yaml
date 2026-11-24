@@ -2,6 +2,7 @@ replicaCount: 3
 
 image:
   repository: abuseven/agro-app
+  # Updated automatically by the CI pipeline with the commit SHA.
   tag: "latest"
   pullPolicy: IfNotPresent
 
@@ -14,6 +15,8 @@ service:
 metrics:
   enabled: true
   path: /metrics
+  # Label that kube-prometheus-stack uses to discover ServiceMonitors
+  releaseLabel: kube-prometheus-stack
 
 serviceAccount:
   create: true
@@ -23,6 +26,10 @@ probes:
   readinessPath: /health
   livenessPath: /health
 
-serviceAccount:
-  create: true
-  name: ""
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

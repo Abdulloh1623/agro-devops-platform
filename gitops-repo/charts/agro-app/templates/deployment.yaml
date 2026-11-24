@@ -18,6 +18,10 @@ spec:
         prometheus.io/path: "{{ .Values.metrics.path | default "/metrics" }}"
         prometheus.io/port: "{{ .Values.service.targetPort | default 5000 }}"
     spec:
+      serviceAccountName: {{ include "agro-app.serviceAccountName" . }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
       containers:
         - name: {{ include "agro-app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -31,11 +35,17 @@ spec:
             httpGet:
               path: {{ .Values.probes.readinessPath | default "/health" | quote }}
               port: web
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
 
           livenessProbe:
             httpGet:
               path: {{ .Values.probes.livenessPath | default "/health" | quote }}
               port: web
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            failureThreshold: 3
 
 
           env:

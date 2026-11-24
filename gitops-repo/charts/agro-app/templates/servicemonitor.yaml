@@ -1,17 +1,20 @@
+{{- if .Values.metrics.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: agro-app
+  name: {{ include "agro-app.fullname" . }}
   labels:
-    release: kube-prometheus-stack
+    {{- include "agro-app.labels" . | nindent 4 }}
+    release: {{ .Values.metrics.releaseLabel | default "kube-prometheus-stack" }}
 spec:
   namespaceSelector:
     matchNames:
-      - default
+      - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      app: agro-app
+      {{- include "agro-app.selectorLabels" . | nindent 6 }}
   endpoints:
     - port: web
-      path: {{ .Values.metrics.path }}
+      path: {{ .Values.metrics.path | default "/metrics" }}
       interval: 15s
+{{- end }}

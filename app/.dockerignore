@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+test_app.py
+requirements-dev.txt
+.env
+.git

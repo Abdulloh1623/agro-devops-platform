@@ -1,4 +1,4 @@
-﻿from flask import Flask
+from flask import Flask
 from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
 app = Flask(__name__)
