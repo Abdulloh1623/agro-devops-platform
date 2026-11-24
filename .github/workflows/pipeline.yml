@@ -1,5 +1,9 @@
 name: CI-CD
 
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   push:
     branches: [ "main" ]
@@ -57,10 +61,19 @@ jobs:
       # ArgoCD detects the change and rolls out this exact image.
       - name: Update image tag in Helm values
         run: |
-          sed -i -E 's|^(\s*tag:\s*).*$|\1"${{ github.sha }}"|' gitops-repo/charts/agro-app/values.yaml
-          grep -n 'tag:' gitops-repo/charts/agro-app/values.yaml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The checked-out commit may be behind main (re-runs, earlier bot
+          # commits), so sync with the latest main before editing and pushing.
+          git fetch origin main
+          git checkout -B main origin/main
+          sed -i -E 's|^(\s*tag:\s*).*$|\1"${{ github.sha }}"|' gitops-repo/charts/agro-app/values.yaml
+          grep -n 'tag:' gitops-repo/charts/agro-app/values.yaml
           git add gitops-repo/charts/agro-app/values.yaml
-          git diff --cached --quiet || git commit -m "ci: deploy agro-app ${{ github.sha }} [skip ci]"
-          git push
+          git diff --cached --quiet && echo "tag unchanged" && exit 0
+          git commit -m "ci: deploy agro-app ${{ github.sha }} [skip ci]"
+          for i in 1 2 3; do
+            git push origin main && exit 0
+            git pull --rebase origin main
+          done
+          exit 1
